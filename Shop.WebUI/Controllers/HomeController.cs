@@ -52,6 +52,22 @@ namespace Shop.WebUI.Controllers
             return View();
         }
 
+
+        public ActionResult Details(int id)
+        {
+            Product product = productDao.FindById(id);
+
+            if (product == null)
+            {
+                return HttpNotFound();
+            }
+            else
+            {
+                return View(product);
+            }
+        }
+
+
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
