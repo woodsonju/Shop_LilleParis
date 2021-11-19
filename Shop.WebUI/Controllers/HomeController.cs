@@ -1,4 +1,5 @@
 ﻿using Shop.Core.Models;
+using Shop.Core.ViewModels;
 using Shop.DataAccess.SQL;
 using Shop.DataAccess.SQL.LogicMetier;
 using System;
@@ -21,9 +22,27 @@ namespace Shop.WebUI.Controllers
             categoryDao = new SQLRepository<Category>(new MyContext());
         }
 
-        public ActionResult Index()
+        public ActionResult Index(string Category = null)
         {
-            return View();
+            List<Product> products;
+            List<Category> categories = categoryDao.Collection().ToList();
+
+            //Si Category est égal à null (Si on ne selectionne pas une catégorie), on retourne la liste des Produits
+            //Sinon on retourne les produits de la categorie mentionnée (selectionnée)
+            if(Category == null)
+            {
+                products = productDao.Collection().ToList();
+            } else
+            {
+                products = productDao.Collection().Where(p => p.Category == Category).ToList();
+            }
+
+            ProductListViewModel viewModel = new ProductListViewModel();
+
+            viewModel.Products = products;
+            viewModel.Categories = categories;
+
+            return View(viewModel);
         }
 
         public ActionResult About()
