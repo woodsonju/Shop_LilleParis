@@ -44,12 +44,13 @@ namespace Shop.WebUI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Product product, HttpPostedFileBase image)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return View(product);
-            } else
+            }
+            else
             {
-                if(image != null)
+                if (image != null)
                 {
                     int maxId;
                     try
@@ -66,7 +67,7 @@ namespace Shop.WebUI.Controllers
 
                     //On va sauvegarder notre image dans un dossier prodImages, qui se trouve dans un dossier Content
                     product.Image = nextId + Path.GetExtension(image.FileName);
-                    image.SaveAs(Server.MapPath("~/Content/prodImages/") + product.Image);  
+                    image.SaveAs(Server.MapPath("~/Content/prodImages/") + product.Image);
                 }
 
                 Session["Image"] = product.Image;
@@ -82,10 +83,11 @@ namespace Shop.WebUI.Controllers
         {
             //On récupere le produit à modifier
             Product p = productDao.FindById(id);
-            if(p == null)
+            if (p == null)
             {
                 return HttpNotFound();
-            }else
+            }
+            else
             {
                 ProductCategoryViewModel viewModel = new ProductCategoryViewModel();
 
@@ -98,7 +100,63 @@ namespace Shop.WebUI.Controllers
                 return View(viewModel);
             }
         }
-      
 
-     }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(Product product, HttpPostedFileBase image)
+        {
+            if(!ModelState.IsValid)
+            {
+                return View(product);
+            } else
+            {
+                if(image != null)
+                {
+                    product.Image = product.Id + Path.GetExtension(image.FileName);
+                    image.SaveAs(Server.MapPath("~/Content/prodImages/") + product.Image);
+                }else
+                {
+                    product.Image = (string)Session["Image"];
+                }
+
+                productDao.Update(product);
+                productDao.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+        }
+
+        public ActionResult Delete(int id)
+        {
+            Product p = productDao.FindById(id);
+
+            if(p == null)
+            {
+                return HttpNotFound();
+            } else
+            {
+                return View(p);
+            }
+        }
+
+        [HttpPost]
+        [ActionName("Delete")]
+        public ActionResult ConfirmDelete(int id)
+        {
+            Product prodToDelete = productDao.FindById(id);
+
+            if (prodToDelete == null)
+            {
+                return HttpNotFound();
+            }
+            else
+            {
+                productDao.DeleteById(id);
+                productDao.SaveChanges();
+
+                return RedirectToAction("Index");
+            }
+        }
+
+    }
 }

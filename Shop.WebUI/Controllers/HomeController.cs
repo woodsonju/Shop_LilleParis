@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Shop.Core.Models;
+using Shop.DataAccess.SQL;
+using Shop.DataAccess.SQL.LogicMetier;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,6 +11,16 @@ namespace Shop.WebUI.Controllers
 {
     public class HomeController : Controller
     {
+        IRepository<Product> productDao;
+        IRepository<Category> categoryDao;
+
+
+        public HomeController()
+        {
+            productDao = new SQLRepository<Product>(new MyContext());
+            categoryDao = new SQLRepository<Category>(new MyContext());
+        }
+
         public ActionResult Index()
         {
             return View();
