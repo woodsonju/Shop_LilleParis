@@ -46,6 +46,11 @@
                 @Html.DisplayFor(model => model.Category)
             </dd>
 
+            <dd>
+                <a href="/Achat/Ajouter/@Model.Id" class="btn btn-default">Add to basket</a>
+            </dd>
+
+            <dt></dt>
             <dd>@Html.ActionLink("Back to List", "Index")</dd>
 
         </dl>

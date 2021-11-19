@@ -1,0 +1,36 @@
+﻿@model Shop.Core.Models.Utilisateur
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div class="col-sm-12" style="margin-top:50px; margin-bottom:30px">
+    <img src="~/Content/accountImages/imgProfile.png" alt="Alternate Text" class="img-responsive"  style="height:100px; border-radius:50px"/>
+</div>
+
+<div style="margin-bottom: 150px">
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.UserName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

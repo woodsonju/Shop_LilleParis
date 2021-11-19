@@ -1,0 +1,40 @@
+﻿@model IEnumerable<Shop.Core.Models.Product>
+
+@{
+    ViewBag.Title = "Panier";
+}
+
+<h2>Panier</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Price)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Price)
+        </td>
+    </tr>
+
+    <tr>
+        <td></td>
+        <td></td>
+        <td class="text-right"> <strong>Total = @Session["total"]</strong></td>
+    </tr>
+}
+
+</table>

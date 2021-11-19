@@ -25,6 +25,9 @@
                     <li>@Html.ActionLink("Category", "Index", "Category")</li>
                     <li>@Html.ActionLink("Product", "Index", "Products")</li>
                 </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li>@Html.ActionLink("Panier(" + Session["nbProd"] + ")", "Panier", "Achat")</li>
+                </ul>
             </div>
         </div>
     </div>
