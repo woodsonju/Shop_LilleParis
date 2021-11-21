@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - Mon application ASP.NET</title>
@@ -22,11 +22,17 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Accueil", "Index", "Home")</li>
-                    <li>@Html.ActionLink("Category", "Index", "Category")</li>
-                    <li>@Html.ActionLink("Product", "Index", "Products")</li>
+                    @if (Session["Connexion"] != null && (int)Session["TypeUtilisateur"] == 0)
+                    {
+                        <li>@Html.ActionLink("Product", "Index", "Product")</li>
+                    }
+                    @if (Session["Connexion"] != null && (int)Session["TypeUtilisateur"] == 0)
+                    {
+                        <li>@Html.ActionLink("Category", "Index", "Category")</li>
+                    }
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li>@Html.ActionLink("Panier(" + Session["nbProd"] + ")", "Panier", "Achat")</li>
+                    <li>@Html.Partial("_LoginPartial")</li>
                 </ul>
             </div>
         </div>

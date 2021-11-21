@@ -1,0 +1,34 @@
+﻿<!--S'il n'est pas connecté on lui propose de créer un compte ou de se connecter-->
+@if (Session["Connexion"] == null)
+{
+    <li>@Html.ActionLink("Créer un compte", "Register", "Account")</li>
+    <li>@Html.ActionLink("Connexion", "Login", "Account")</li>
+}
+else
+{
+    <!--S 'il est connecté en tant qu'Admin-->
+    if ((int)Session["TypeUtilisateur"] == 0)
+    {
+        <li class="has-children active list-navbar">
+            @Html.ActionLink("Admin " + Session["Connexion"], "Index", "Home", null, new { data_toggle = "dropdown", @class = "dropdown-toggle" })
+            <ul class="dropdown-menu">
+                <li>@Html.ActionLink("Gestion des utilisateurs", "Index", "Admin")</li>
+                <li>@Html.ActionLink("Déconnexion", "Logout", "Account")</li>
+                <li>@Html.ActionLink("Profil ", "Details", "Account", new { id = Session["Id"] }, null)</li>
+            </ul>
+        </li> }
+    else
+    {
+        <!--S 'il est connecté en tant qu'un utilisateur-->
+        <li class="has-children active">
+            @Html.ActionLink((String)Session["Connexion"], "Index", "Home", null, new { data_toggle = "dropdown", @class = "dropdown-toggle" })
+            <ul class="dropdown-menu">
+                <li>@Html.ActionLink("Déconnexion", "Logout", "Account")</li>
+                <li>@Html.ActionLink("Panier(" + Session["nbProd"] + ")", "Panier", "Achat")</li>
+                <li>@Html.ActionLink("Profil ", "Details", "Account", new { id = Session["Id"] }, null)</li>
+            </ul>
+        </li>
+    }
+
+}
+

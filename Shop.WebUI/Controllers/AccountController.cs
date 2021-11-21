@@ -5,6 +5,7 @@ using Shop.WebUI.Exceptions;
 using Shop.WebUI.Service;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -104,6 +105,8 @@ namespace Shop.WebUI.Controllers
                 {
                     //Connexion a reussi
                     Session["Connexion"] = u.UserName;
+                    Session["TypeUtilisateur"] = u.TypeUtilisateur;
+                    Session["Email"] = u.Email;
                     Session["Id"] = u.Id;
                     Session["Photo"] = u.Photos;
 
@@ -142,6 +145,58 @@ namespace Shop.WebUI.Controllers
             }
 
             return View(utilisateur);
+
+        }
+
+
+        public ActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Utilisateur utilisateur = userService.FindById((int)id);
+            if (utilisateur == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(utilisateur);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(Utilisateur user, HttpPostedFileBase photo)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(user);
+            }
+            else
+            {
+                //Si on modifie la photo   ==>  photo  non null
+                if (photo != null)
+                {
+                    user.Photos = user.UserName + Path.GetExtension(photo.FileName);
+                    //Sauvegarde la photo dans le dossier AccountImages
+                    photo.SaveAs(Server.MapPath("~/Content/accountImages/") + user.Photos);
+                    //Actualise la session utilisateur avec la nouvelle photo
+                    Session["Photo"] = user.Photos;
+                }
+                else
+                {
+                    //Dans le cas où l'ont modifie pas la photo
+                    //On récupère la photo de la session avec laquelle on s'est connectée
+                    user.Photos = (string)Session["Photo"];
+                }
+
+                userService.Update(user);
+                userService.SaveChanges();
+
+                return RedirectToAction("Details", new { Id = user.Id });
+                //return RedirectToAction("Index");
+            }
+
 
         }
     }
